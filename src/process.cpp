@@ -1,6 +1,7 @@
 #include "common.h"
 #include <Arduino.h>
 
+// function to ge the distance from the sensor
 float getDistance() {
     digitalWrite(TRIG_PIN, LOW);
     delayMicroseconds(2);

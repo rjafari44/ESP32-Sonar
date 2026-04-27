@@ -7,5 +7,5 @@ constexpr int ECHO_PIN{4};
 // set servo pin
 constexpr int SERVO_PIN{5};
 
-// --- Sensor ---
+// function to ge the distance from the sensor
 float getDistance();
