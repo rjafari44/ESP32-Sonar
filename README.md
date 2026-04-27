@@ -1,6 +1,6 @@
 # ESP32 Sonar
 
-A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays real-time radar output. This was designed as part of the IEEE program at UCI, check them out!
+A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays real-time radar output. This was designed as part of the IEEE program at UCI, [Check them Out!](https://ieee.ics.uci.edu/)
 
 ---
 
@@ -11,7 +11,6 @@ A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 - [Custom Mounts](#custom-mounts)
 - [Electrical](#electrical)
 - [Processing Setup](#processing-setup)
-- [Radar Output](#radar-output)
 - [How to Run](#how-to-run)
 - [Serial Note](#serial-note)
 - [Troubleshooting](#troubleshooting)
@@ -22,10 +21,10 @@ A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 
 - ESP32-C3 development board  
 - HC-SR04 ultrasonic sensor  
-- SG90 servo motor    
+- SG90 servo motor  
 - Jumper wires  
-- Servo
-- Mounting hardware (appropriate screws)
+- Servo  
+- Mounting hardware (appropriate screws)  
 
 ---
 
@@ -33,18 +32,20 @@ A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 
 The servo sweeps the ultrasonic sensor from 0° to 180°. At each angle, distance is measured and sent over serial. This creates a physical scanning motion that behaves like a radar system.
 
+---
+
 ## Custom Mounts
 
 ### Servo Mount (Custom)
 
 A custom-designed mount was used to secure the servo and keep it stable during scanning. The STL file is included.
 
+Servo mount assembly:
+![diagram](/assets/servo-assembly.png)
+
 ### Ultrasonic Sensor Mount
 
 The ultrasonic sensor mount was sourced online and is not included. You will need to download a similar model or design your own.
-
-Servo mount image:
-![diagram]()
 
 ---
 
@@ -52,10 +53,12 @@ Servo mount image:
 
 ### Overview
 
-This system requires both signal and stable power delivery, especially for the servo motor. Power instability is the most common cause of glitches or resets.
+This system requires stable power delivery, especially for the servo motor. Power instability is the most common cause of glitches or resets.
 
-Schematic image:
-![schematic]()
+The electrical schematic was designed in **LTspice**, and the project includes the LTspice schematic files for reference and modification.
+
+Schematic:
+![schematic](/assets/schematic.png)
 
 ### Connections
 
@@ -67,15 +70,15 @@ Schematic image:
 
 **Servo Motor:**
 - Signal → GPIO 5  
-- VCC → 5V (external recommended but ESP32 works)  
+- VCC → 5V (external recommended but ESP32 can work in light load cases)  
 - GND → shared ground with ESP32  
 
 ### Power Notes
 
-- The servo should NOT be powered directly from the ESP32-C3 3.3V rail  
-- Use the ESP32 5V supply for the servo, external 5V if possible
-- All grounds must be connected together (common ground)  
-- Noise on servo power can affect sensor readings  
+- Do not rely on ESP32 3.3V for servo power  
+- External 5V is strongly recommended for stable operation  
+- All grounds must be shared (common ground)  
+- Servo noise can affect sensor readings if power is unstable  
 
 ---
 
@@ -90,11 +93,7 @@ Processing is used to visualize the radar output.
 
 The display shows sweep motion, detected objects, and distance scaling.
 
----
-
-## Sonar Output
-
-A sample sonar output on processing: 
+Sample sonar output on Processing:
 ![diagram]()
 
 ---
