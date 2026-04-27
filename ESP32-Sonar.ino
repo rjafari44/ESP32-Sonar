@@ -1,12 +1,8 @@
 #include "common.h"
 
-#define TRIG_PIN 5
-#define ECHO_PIN 18
-#define SERVO_PIN 13
-
-int angle = 0;
-int stepSize = 2;
-bool forward = true;
+int angle{};
+int stepSize{2};
+bool forward{true};
 
 void setup() {
     Serial.begin(115200);

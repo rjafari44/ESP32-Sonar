@@ -1,8 +1,8 @@
 #include <Arduino.h>
-#include "sonar.h"
+#include "common.h"
 
-static int trigPinGlobal;
-static int echoPinGlobal;
+static int trigPinGlobal{};
+static int echoPinGlobal{};
 
 void setupUltrasonic(int trigPin, int echoPin) {
     trigPinGlobal = trigPin;

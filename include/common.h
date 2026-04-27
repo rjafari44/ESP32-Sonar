@@ -1,8 +1,8 @@
 #pragma once
 
 // set ultrasonic pins of integer type
-constexpr int trigPin{3};
-constexpr int echoPin{4};
+constexpr int TRIG_PIN{3};
+constexpr int ECHO_PIN{4};
 
 // set servo pin
 constexpr int SERVO_PIN{5};
