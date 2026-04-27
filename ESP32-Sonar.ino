@@ -20,10 +20,9 @@ void loop() {
 
     float distance = getDistance();
 
-    // Debug + Processing output
-    Serial.print("ANGLE:");
+    // processing output
     Serial.print(angle);
-    Serial.print(",DIST:");
+    Serial.print(",");
     Serial.println(distance);
 
     // Sweep logic
