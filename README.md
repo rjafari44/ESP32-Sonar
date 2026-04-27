@@ -1,13 +1,12 @@
 # ESP32 Sonar
 
-A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays real-time radar output. This was designed as part of the IEEE program at UCI, [Check them Out!](https://ieee.ics.uci.edu/)
+A simple sonar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays a real-time radar-style interface. The servo rotates the ultrasonic sensor from 0° to 180°, taking distance measurements at each angle and sending them over serial, creating a physical scanning motion based on sonar principles. This was designed as part of the IEEE program at UCI, [Check them Out!](https://ieee.ics.uci.edu/)
 
 ---
 
 ## Table of Contents
 
 - [Bill of Materials](#bill-of-materials)
-- [System Overview](#system-overview)
 - [Custom Mounts](#custom-mounts)
 - [Electrical](#electrical)
 - [Processing Setup](#processing-setup)
@@ -24,13 +23,7 @@ A simple radar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 - SG90 servo motor  
 - Jumper wires  
 - Servo  
-- Mounting hardware (appropriate screws)  
-
----
-
-## System Overview
-
-The servo sweeps the ultrasonic sensor from 0° to 180°. At each angle, distance is measured and sent over serial. This creates a physical scanning motion that behaves like a radar system.
+- Mounting hardware (appropriate screws)
 
 ---
 
@@ -94,7 +87,7 @@ Processing is used to visualize the radar output.
 The display shows sweep motion, detected objects, and distance scaling.
 
 Sample sonar output on Processing:
-![diagram]()
+![Processing Output]()
 
 ---
 
