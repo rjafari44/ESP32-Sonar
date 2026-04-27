@@ -1,20 +1,26 @@
 #include "common.h"
+#include <ESP32Servo.h>
 
-int angle{};
-int stepSize{2};
-bool forward{true};
+static Servo myServo;
 
 void setup() {
     Serial.begin(115200);
 
-    setupServo(SERVO_PIN);
-    setupUltrasonic(TRIG_PIN, ECHO_PIN);
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+
+    myServo.attach(SERVO_PIN);
 
     Serial.println("Sonar system starting...");
+
 }
 
 void loop() {
-    setServoAngle(angle);
+    static int angle{};
+    static int stepSize{2};
+    static bool forward{true};
+
+    myServo.write(angle);
 
     delay(50); // allow servo to settle
 
