@@ -105,7 +105,13 @@ Sample sonar output on Processing:
 - Uploaded using arduino-cli  
 - Arduino IDE workflow may differ depending on system  
 - Non-Linux systems may require different setup steps  
-- Added shell script to simplify running:
+- Added shell script to simplify running (make sure to chmod +x)
+
+Within project root:
+```bash
+./bin/run_sonar.sh
+```
+Or within bin/
 ```bash
 ./run_sonar.sh
 ```
