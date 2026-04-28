@@ -2,7 +2,7 @@
 
 A simple sonar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays a real-time radar-style interface. The servo rotates the ultrasonic sensor from 0° to 180°, taking distance measurements at each angle and sending them over serial, creating a physical scanning motion based on sonar principles. This was designed as part of the IEEE program at UCI, [Check them Out!](https://ieee.ics.uci.edu/)
 
-![Physical Setup](/assets/complete_build.jpg)
+![Physical Setup](/assets/complete-build.jpg)
 
 ---
 
@@ -89,7 +89,7 @@ Processing is used to visualize the radar output.
 The display shows sweep motion, detected objects, and distance scaling.
 
 Sample sonar output on Processing:
-![Processing Output]()
+![Processing Output](/assets/sonar-graph.png)
 
 ---
 

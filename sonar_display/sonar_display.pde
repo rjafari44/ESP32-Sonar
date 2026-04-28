@@ -5,7 +5,8 @@ Serial myPort;
 // Sonar data
 int angle = 0;
 float distance = 0;
-int maxDistance = 20; // Increased to 25cm
+int maxDistance = 20; // Increased to 20cm
+float mergeDistance = 20; // pixels (tweak 15–30)
 
 // Display settings
 int radarRadius;
@@ -145,7 +146,26 @@ void drawDetectionLine() {
     circle(px, py, 4);
     
     // Add to objects list
+    boolean merged = false;
+
+  for (DetectedObject obj : objects) {
+    float d = dist(px, py, obj.x, obj.y);
+  
+    if (d < mergeDistance) {
+      // Update existing object instead of adding new one
+      obj.x = lerp(obj.x, px, 0.3);  // smooth movement
+      obj.y = lerp(obj.y, py, 0.3);
+      obj.distance = distance;
+      obj.angle = angle;
+      obj.age = 0; // reset age since it's still being detected
+      merged = true;
+      break;
+    }
+  }
+
+  if (!merged) {
     objects.add(new DetectedObject(px, py, distance, angle));
+  }
   }
 }
 
@@ -162,7 +182,7 @@ void drawSweep() {
     float a = angle - i * 1.2;
     float alpha = map(i, 0, 40, 60, 0); // Reduced starting opacity for darker look
     
-    fill(0, 255, 100, alpha);
+    fill(0, 180, 70, alpha);
     
     float x = cos(radians(a)) * radarRadius;
     float y = -sin(radians(a)) * radarRadius;
@@ -171,8 +191,8 @@ void drawSweep() {
   endShape(CLOSE);
   
   // Add bright edge line at the sweep front
-  stroke(0, 255, 100, 200); // Slightly reduced for darker look
-  strokeWeight(2);
+  stroke(80, 255, 140, 255);
+  strokeWeight(3);
   float x = cos(radians(angle)) * radarRadius;
   float y = -sin(radians(angle)) * radarRadius;
   line(0, 0, x, y);
