@@ -1,11 +1,17 @@
 #pragma once
 
-// set ultrasonic pins of integer type
-constexpr int TRIG_PIN{3};
-constexpr int ECHO_PIN{4};
+// Ultrasonic sensor pins
+const int TRIG_PIN = 3;
+const int ECHO_PIN = 4;
 
-// set servo pin
-constexpr int SERVO_PIN{5};
+// Servo pin
+const int SERVO_PIN = 10;
 
-// function to ge the distance from the sensor
+// Mode control pins
+const int BUTTON_PIN = 8;
+const int POT_PIN = 5;
+
+// Functions
 float getDistance();
+bool handleButton();              // returns current mode (true = manual)
+bool modeChangedToAuto();         // detects manual → auto transition
