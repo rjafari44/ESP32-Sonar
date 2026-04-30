@@ -7,7 +7,7 @@ static bool manualMode{false};
 static bool lastReading{HIGH};
 static bool stableState{HIGH};
 static unsigned long lastDebounceTime{0};
-static const unsigned long debounceDelay{50};
+static const unsigned long debounceDelay{20};  // Reduced from 50ms to 20ms
 
 static bool lastModeSnapshot{false};
 
