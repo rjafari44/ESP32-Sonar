@@ -4,9 +4,9 @@
 static Servo myServo;
 
 // ---------------- STATE VARIABLES ----------------
-static int angle = 0;
-static const int stepSize = 2;
-static bool forward = true;
+static int angle{0};
+static constexpr int stepSize{2};
+static bool forward{true};
 
 void setup() {
     Serial.begin(115200);
@@ -25,31 +25,39 @@ void setup() {
 }
 
 void loop() {
-    bool manualMode = handleButton();
+    // Declare variables once at top
+    bool manualMode{handleButton()};
+    int potValue{0};
+    float distance{0};
 
     // Reset on transition back to auto mode
     if (modeChangedToAuto()) {
+        int previousAngle = angle;  // Remember where we were
         angle = 0;
         forward = true;
         myServo.write(angle);
-        delay(100);
+        
+        // Calculate time needed: ~2ms per degree is safe for most servos
+        int travelDistance = abs(previousAngle - angle);
+        int settleTime = travelDistance * 2;  // 2ms per degree
+        delay(settleTime);  // Wait for servo to actually reach position
     }
 
     if (manualMode) {
         // ---------------- MANUAL MODE ----------------
-        int potValue = analogRead(POT_PIN);
-        angle = map(potValue, 0, 4095, 180, 0);  // FLIPPED: 0→180, 4095→0
+        potValue = analogRead(POT_PIN);
+        angle = map(potValue, 0, 4095, 180, 0);
         
         myServo.write(angle);
-        delay(50);
+        delay(30);  // Reduced for faster response
         
-        float distance = getDistance();
+        distance = getDistance();
         
         Serial.print(angle);
         Serial.print(",");
         Serial.println(distance);
         
-        delay(30);
+        delay(15);
     } 
     else {
         // ---------------- AUTO SWEEP MODE ----------------
@@ -72,16 +80,16 @@ void loop() {
 
         // Move servo
         myServo.write(angle);
-        delay(50);
+        delay(30);  // Reduced - just enough for servo to start moving
 
         // Take measurement
-        float distance = getDistance();
+        distance = getDistance();
 
         // Output for Processing
         Serial.print(angle);
         Serial.print(",");
         Serial.println(distance);
 
-        delay(30);
+        delay(15);  // Small delay between readings
     }
 }

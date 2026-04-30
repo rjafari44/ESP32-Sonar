@@ -1,18 +1,17 @@
 #include "common.h"
 #include <Arduino.h>
 
-// ---------------- internal state ----------------
-static bool manualMode{false};
-
-static bool lastReading{HIGH};
-static bool stableState{HIGH};
-static unsigned long lastDebounceTime{0};
-static const unsigned long debounceDelay{20};  // Reduced from 50ms to 20ms
-
-static bool lastModeSnapshot{false};
+// ---------------- Shared state (must be at file scope) ----------------
+static bool manualMode{false};  // Shared between handleButton() and modeChangedToAuto()
 
 // ---------------- button handling ----------------
 bool handleButton() {
+    // Button debouncing state - local to this function
+    static bool lastReading{HIGH};
+    static bool stableState{HIGH};
+    static unsigned long lastDebounceTime{0};
+    static constexpr unsigned long debounceDelay{10};  // Reduced for faster response
+    
     bool reading{digitalRead(BUTTON_PIN)};
     unsigned long now{millis()};
 
@@ -37,6 +36,9 @@ bool handleButton() {
 
 // ---------------- transition detection ----------------
 bool modeChangedToAuto() {
+    // Transition tracking - local to this function
+    static bool lastModeSnapshot{false};
+    
     bool currentMode{manualMode};
     bool transitioned{lastModeSnapshot && !currentMode};
 
