@@ -10,8 +10,10 @@ constexpr int SERVO_PIN{10};
 // servo step ammount
 constexpr int STEP_SIZE{2};
 
-// mode control pins
+// button pin
 constexpr int BUTTON_PIN{8};
+
+// button press debounce delay 
 constexpr unsigned long DEBOUNCE_DELAY{10};
 
 // potentiometer pin
