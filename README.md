@@ -2,8 +2,6 @@
 
 A simple sonar-style scanning system using an ESP32-C3, ultrasonic sensor, and servo motor. The sensor sweeps across an arc, measures distance, and streams data to a Processing visualization that displays a real-time radar-style interface. The servo rotates the ultrasonic sensor from 0° to 180°, taking distance measurements at each angle and sending them over serial, creating a physical scanning motion based on sonar principles. This was designed as part of the IEEE program at UCI, [Check them Out!](https://ieee.ics.uci.edu/)
 
-![Physical Setup](/assets/complete-build.jpg)
-
 ---
 
 ## Table of Contents
@@ -11,6 +9,7 @@ A simple sonar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 - [Bill of Materials](#bill-of-materials)
 - [Custom Mounts](#custom-mounts)
 - [Electrical](#electrical)
+- [Features](#features)
 - [Processing Setup](#processing-setup)
 - [How to Run](#how-to-run)
 - [Serial Note](#serial-note)
@@ -23,8 +22,9 @@ A simple sonar-style scanning system using an ESP32-C3, ultrasonic sensor, and s
 - ESP32-C3 development board  
 - HC-SR04 ultrasonic sensor  
 - SG90 servo motor  
+- Push button (for mode switching)
+- Potentiometer (for manual control)
 - Jumper wires  
-- Servo  
 - Mounting hardware (appropriate screws)
 
 ---
@@ -60,13 +60,23 @@ Schematic:
 **Ultrasonic Sensor (HC-SR04):**
 - VCC → 5V  
 - GND → GND  
-- TRIG → GPIO 3  
+- TRIG → GPIO 5  
 - ECHO → GPIO 4  
 
 **Servo Motor:**
-- Signal → GPIO 5  
+- Signal → GPIO 10  
 - VCC → 5V (external recommended but ESP32 can work in light load cases)  
 - GND → shared ground with ESP32  
+
+**Mode Button:**
+- One side → GPIO 8
+- Other side → GND
+- Internal pull-up enabled in code
+
+**Potentiometer:**
+- VCC → 3.3V
+- GND → GND
+- Wiper → GPIO 1 (ADC)
 
 ### Power Notes
 
@@ -74,6 +84,18 @@ Schematic:
 - External 5V is strongly recommended for stable operation  
 - All grounds must be shared (common ground)  
 - Servo noise can affect sensor readings if power is unstable  
+
+---
+
+## Features
+
+### Auto Sweep Mode (Default)
+The servo automatically sweeps from 0° to 180° and back, continuously scanning the environment. This creates the classic radar-style visualization.
+
+### Manual Mode
+Press the button to switch to manual mode. Use the potentiometer to directly control the servo angle and take measurements at specific positions. Press the button again to return to auto sweep mode.
+
+When switching from manual back to auto mode, the servo automatically resets to 0° before resuming the sweep pattern.
 
 ---
 
@@ -95,9 +117,20 @@ Sample sonar output on Processing:
 
 ## How to Run
 
+### Project Versions
+
+This project is available in two versions:
+
+**Modular Version** (original): Code split across multiple files (`ESP32-Sonar.ino`, `common.h`, `process.cpp`, `mode_control.cpp`) located in the project root. Better for understanding code organization and making targeted changes.
+
+**Combined Version**: All code in a single `ESP32-Sonar.ino` file located in `combined/`. Easier to upload and manage as a standalone file.
+
+Both versions have identical functionality.
+
 ### 1. Hardware Setup
 - Assemble ESP32-C3, servo, and ultrasonic sensor  
 - Mount sensor securely on servo  
+- Connect mode button and potentiometer
 - Use external 5V power for servo stability  
 - Ensure all grounds are shared  
 
@@ -105,15 +138,22 @@ Sample sonar output on Processing:
 - Uploaded using arduino-cli  
 - Arduino IDE workflow may differ depending on system  
 - Non-Linux systems may require different setup steps  
-- Added shell script to simplify running (make sure to chmod +x)
+- Added shell scripts to simplify running (make sure to chmod +x)
 
-Within project root:
+**For modular version** (within project root):
 ```bash
 ./bin/run_sonar.sh
 ```
-Or within bin/
+
+**For combined version** (within project root):
 ```bash
-./run_sonar.sh
+./bin/run_combined.sh
+```
+
+Or within bin/:
+```bash
+./run_sonar.sh     # modular version
+./run_combined.sh  # combined version
 ```
 
 ### 3. Run Visualization
@@ -121,6 +161,11 @@ Or within bin/
 - Load `.pde` file  
 - Select serial port
 - Run the code
+
+### 4. Using the System
+- **Auto mode**: System starts in auto sweep mode automatically
+- **Manual mode**: Press the button once to switch to manual control, adjust the potentiometer to set angle
+- **Back to auto**: Press the button again to return to auto sweep (servo resets to 0°)
 
 ---
 
@@ -142,6 +187,8 @@ Processing will not connect otherwise.
 - Servo not moving → check external power  
 - No data → verify wiring  
 - Erratic readings → unstable ground or power noise  
-- No connection → serial port already in use or wrong port  
+- No connection → serial port already in use or wrong port
+- Button not working → check pull-up configuration and wiring
+- Manual mode unresponsive → verify potentiometer connections and pin assignment
 
 ---
