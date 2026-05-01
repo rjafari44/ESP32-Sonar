@@ -27,7 +27,6 @@ void loop() {
     bool manualMode{handleButton()}; // variable for current mode (manual or auto)
     int potValue{};                  // variable for raw potentiometer reading
     float distance{};                // variable for ultrasonic distance reading
-    static int previousAngle{};      // variable that stores last angle before reset transition
 
     // reset on transition back to auto mode
     if (modeChangedToAuto()) {
