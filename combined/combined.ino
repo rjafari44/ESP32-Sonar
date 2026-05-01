@@ -44,7 +44,7 @@ float getDistance() {
     return distance; // return the calculated distance
 }
 
-// ===== FUNCTION: HANDLE BUTTON STATE AND MODE SWITCHING =====
+// function for handling the conditions of the button
 bool handleButton() {
     static bool lastReading{HIGH};           // previous raw button read (for edge detection)
     static bool stableState{HIGH};           // debounced stable button state
