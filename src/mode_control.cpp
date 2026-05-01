@@ -3,7 +3,7 @@
 
 bool manualMode{false}; // tracks current mode (true = manual, false = auto)
 
-// function for handling the stae of the button
+// function for handling the state of the button
 bool handleButton() {
     static bool lastReading{HIGH};           // previous raw button read (for edge detection)
     static bool stableState{HIGH};           // debounced stable button state
