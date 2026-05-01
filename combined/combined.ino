@@ -50,8 +50,8 @@ bool handleButton() {
     static bool stableState{HIGH};           // debounced stable button state
     static unsigned long lastDebounceTime{}; // time when input last changed (debounce timing)
 
-    bool reading{digitalRead(BUTTON_PIN)};   // current raw button reading
-    unsigned long now{millis()};             // current system time in ms
+    bool reading{digitalRead(BUTTON_PIN)}; // current raw button reading
+    unsigned long now{millis()};           // current system time in ms
 
     if (reading != lastReading) {
         lastDebounceTime = now; // reset debounce timer on change
