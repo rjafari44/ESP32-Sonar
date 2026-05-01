@@ -65,7 +65,7 @@ void loop() {
         // ----- AUTO SWEEP MODE -----
 
         if (forward) {
-            angle += stepSize;   // increase angle
+            angle += STEP_SIZE;   // increase angle
 
             if (angle >= 180) {  // upper limit reached
                 angle = 180;     // clamp value
@@ -73,7 +73,7 @@ void loop() {
             }
         } 
         else {
-            angle -= stepSize;  // decrease angle
+            angle -= STEP_SIZE;  // decrease angle
 
             if (angle <= 0) {   // lower limit reached
                 angle = 0;      // clamp value
