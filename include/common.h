@@ -1,17 +1,23 @@
 #pragma once
 
-// Ultrasonic sensor pins
+// ultrasonic sensor pins
 constexpr int ECHO_PIN{4};
 constexpr int TRIG_PIN{5};
 
-// Servo pin
+// servo pin
 constexpr int SERVO_PIN{10};
 
-// Mode control pins
+// servo step ammount
+constexpr int STEP_SIZE{2};
+
+// mode control pins
 constexpr int BUTTON_PIN{8};
+constexpr unsigned long DEBOUNCE_DELAY{10};
+
+// potentiometer pin
 constexpr int POT_PIN{1};
 
-// Functions
-float getDistance();
-bool handleButton();              // returns current mode (true = manual)
-bool modeChangedToAuto();         // detects manual → auto transition
+// function declarations
+float getDistance();      // function for getting the distance from ultrasonic sensor
+bool handleButton();      // returns current mode (true = manual)
+bool modeChangedToAuto(); // detects manual and changes to auto transition

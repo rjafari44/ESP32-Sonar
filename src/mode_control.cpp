@@ -1,48 +1,44 @@
 #include "common.h"
 #include <Arduino.h>
 
-// ---------------- Shared state (must be at file scope) ----------------
-static bool manualMode{false};  // Shared between handleButton() and modeChangedToAuto()
+bool manualMode{false}; // tracks current mode (true = manual, false = auto)
 
-// ---------------- button handling ----------------
+// function for handling the stae of the button
 bool handleButton() {
-    // Button debouncing state - local to this function
-    static bool lastReading{HIGH};
-    static bool stableState{HIGH};
-    static unsigned long lastDebounceTime{0};
-    static constexpr unsigned long debounceDelay{10};  // Reduced for faster response
-    
-    bool reading{digitalRead(BUTTON_PIN)};
-    unsigned long now{millis()};
+    static bool lastReading{HIGH};           // previous raw button read (for edge detection)
+    static bool stableState{HIGH};           // debounced stable button state
+    static unsigned long lastDebounceTime{}; // time when input last changed (debounce timing)
+
+    bool reading{digitalRead(BUTTON_PIN)};   // current raw button reading
+    unsigned long now{millis()};             // current system time in ms
 
     if (reading != lastReading) {
-        lastDebounceTime = now;
+        lastDebounceTime = now; // reset debounce timer on change
     }
 
-    if ((now - lastDebounceTime) > debounceDelay) {
+    if ((now - lastDebounceTime) > DEBOUNCE_DELAY) {
         if (reading != stableState) {
-            stableState = reading;
+            stableState = reading; // accept new stable state
 
             if (stableState == LOW) {
-                manualMode = !manualMode;
+                manualMode = !manualMode; // toggle mode on button press
             }
         }
     }
 
-    lastReading = reading;
+    lastReading = reading; // store latest raw reading
 
-    return manualMode;
+    return manualMode; // return current mode
 }
 
-// ---------------- transition detection ----------------
+// function for detecting if mode is switched from manual to auto 
 bool modeChangedToAuto() {
-    // Transition tracking - local to this function
-    static bool lastModeSnapshot{false};
-    
-    bool currentMode{manualMode};
-    bool transitioned{lastModeSnapshot && !currentMode};
+    static bool lastModeSnapshot{false}; // previous mode state (for detecting transitions)
 
-    lastModeSnapshot = currentMode;
+    bool currentMode{manualMode}; // current mode snapshot
+    bool transitioned{lastModeSnapshot && !currentMode}; // true if manual to auto
 
-    return transitioned;
+    lastModeSnapshot = currentMode; // update stored state for next call
+
+    return transitioned; // return whether transition occurred
 }

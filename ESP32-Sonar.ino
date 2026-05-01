@@ -1,95 +1,96 @@
-#include "common.h"
-#include <ESP32Servo.h>
+#include "common.h" 
+#include <ESP32Servo.h> 
 
-static Servo myServo;
+Servo myServo;      // servo motor object used to control position
 
-// ---------------- STATE VARIABLES ----------------
-static int angle{0};
-static constexpr int stepSize{2};
-static bool forward{true};
+int angle{};        // current servo angle (0–180 degrees)
+bool forward{true}; // sweep direction (true = increasing angle)
 
+// main setup
 void setup() {
     Serial.begin(115200);
 
-    pinMode(TRIG_PIN, OUTPUT);
-    pinMode(ECHO_PIN, INPUT);
-    pinMode(BUTTON_PIN, INPUT_PULLUP);
-    pinMode(POT_PIN, INPUT);
+    pinMode(TRIG_PIN, OUTPUT);         // ultrasonic trigger pin
+    pinMode(ECHO_PIN, INPUT);          // ultrasonic echo pin
+    pinMode(BUTTON_PIN, INPUT_PULLUP); // button input with internal pull-up
+    pinMode(POT_PIN, INPUT);           // potentiometer analog input
 
-    myServo.attach(SERVO_PIN);
+    myServo.attach(SERVO_PIN); // attach servo to output pin
 
-    // Initialize to starting position
-    angle = 0;
-    myServo.write(angle);
-    delay(500);
+    angle = 0;            // start at 0 degrees
+    myServo.write(angle); // move servo to initial position
+    delay(500);           // allow servo to settle
 }
 
+// main loop
 void loop() {
-    // Declare variables once at top
-    bool manualMode{handleButton()};
-    int potValue{0};
-    float distance{0};
+    bool manualMode{handleButton()}; // variable for current mode (manual or auto)
+    int potValue{};                  // variable for raw potentiometer reading
+    float distance{};                // variable for ultrasonic distance reading
+    static int previousAngle{};      // variable that stores last angle before reset transition
 
-    // Reset on transition back to auto mode
+    // reset on transition back to auto mode
     if (modeChangedToAuto()) {
-        int previousAngle = angle;  // Remember where we were
-        angle = 0;
-        forward = true;
-        myServo.write(angle);
-        
-        // Calculate time needed: ~2ms per degree is safe for most servos
-        int travelDistance = abs(previousAngle - angle);
-        int settleTime = travelDistance * 2;  // 2ms per degree
-        delay(settleTime);  // Wait for servo to actually reach position
+        int previousAngle = angle; // variable for storing current angle before reset
+        angle = 0;                 // reset servo to start position
+        forward = true;            // reset sweep direction to forward
+        myServo.write(angle);      // move servo to 0 degrees
+
+        int travelDistance = abs(previousAngle - angle); // variable for distance servo must travel
+        int settleTime = travelDistance * 2;             // variable for estimated servo settle time (ms)
+
+        delay(settleTime); // wait for servo to reach position
     }
 
     if (manualMode) {
-        // ---------------- MANUAL MODE ----------------
-        potValue = analogRead(POT_PIN);
-        angle = map(potValue, 0, 4095, 180, 0);
-        
-        myServo.write(angle);
-        delay(30);  // Reduced for faster response
-        
-        distance = getDistance();
-        
+        // ----- MANUAL MODE -----
+
+        potValue = analogRead(POT_PIN); // read potentiometer value
+
+        angle = map(potValue, 0, 4095, 180, 0); // map pot value to servo angle (reversed)
+
+        myServo.write(angle); // move servo to mapped angle
+        delay(30);            // smooth servo response delay
+
+        distance = getDistance(); // measure distance
+
+        // output to serial monitor in this format for processing
         Serial.print(angle);
-        Serial.print(",");
+        Serial.print(",");    
         Serial.println(distance);
-        
-        delay(15);
+
+        delay(15); // delay for stability
     } 
     else {
-        // ---------------- AUTO SWEEP MODE ----------------
-        
-        // Update angle
+        // ----- AUTO SWEEP MODE -----
+
         if (forward) {
-            angle += stepSize;
-            if (angle >= 180) {
-                angle = 180;
-                forward = false;
+            angle += stepSize;   // increase angle
+
+            if (angle >= 180) {  // upper limit reached
+                angle = 180;     // clamp value
+                forward = false; // reverse direction
             }
         } 
         else {
-            angle -= stepSize;
-            if (angle <= 0) {
-                angle = 0;
-                forward = true;
+            angle -= stepSize;  // decrease angle
+
+            if (angle <= 0) {   // lower limit reached
+                angle = 0;      // clamp value
+                forward = true; // reverse direction
             }
         }
 
-        // Move servo
-        myServo.write(angle);
-        delay(30);  // Reduced - just enough for servo to start moving
+        myServo.write(angle);     // update servo position
+        delay(30);                // allow servo movement
 
-        // Take measurement
-        distance = getDistance();
+        distance = getDistance(); // measure distance
 
-        // Output for Processing
-        Serial.print(angle);
-        Serial.print(",");
-        Serial.println(distance);
+        // output to serial monitor in this format for processing
+        Serial.print(angle); 
+        Serial.print(","); 
+        Serial.println(distance); 
 
-        delay(15);  // Small delay between readings
+        delay(15); // delay for stability
     }
 }
