@@ -1,21 +1,21 @@
 #include <ESP32Servo.h>
 
 // pin definitions
-constexpr int ECHO_PIN{4};       // ultrasonic echo pin
-constexpr int TRIG_PIN{5};       // ultrasonic trigger pin
-constexpr int SERVO_PIN{10};     // servo control pin
-constexpr int BUTTON_PIN{8};     // mode button pin
-constexpr int POT_PIN{1};        // potentiometer pin
+constexpr int ECHO_PIN{4};   // ultrasonic echo pin
+constexpr int TRIG_PIN{5};   // ultrasonic trigger pin
+constexpr int SERVO_PIN{10}; // servo control pin
+constexpr int BUTTON_PIN{8}; // mode button pin
+constexpr int POT_PIN{1};    // potentiometer pin
 
 // variables for configuration
-constexpr int STEP_SIZE{2};                    // servo step amount in auto mode
-constexpr unsigned long DEBOUNCE_DELAY{10};    // button debounce delay in ms
+constexpr int STEP_SIZE{2};                 // servo step amount in auto mode
+constexpr unsigned long DEBOUNCE_DELAY{10}; // button debounce delay in ms
 
 // global declarations
-Servo myServo;                  // servo motor object
-int angle{};                    // current servo angle (0–180 degrees)
-bool forward{true};             // sweep direction (true = increasing angle)
-bool manualMode{false};         // current mode (true = manual, false = auto)
+Servo myServo;          // servo motor object
+int angle{};            // current servo angle (0–180 degrees)
+bool forward{true};     // sweep direction (true = increasing angle)
+bool manualMode{false}; // current mode (true = manual, false = auto)
 
 // function for getting the distance from the ultrasonic sensor
 float getDistance() {
