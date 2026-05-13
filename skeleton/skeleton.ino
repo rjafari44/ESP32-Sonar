@@ -46,7 +46,7 @@ void loop() {
     
     potValue = analogRead(POT_PIN);
     
-    angle = map(potValue, 0, 4095, 180, 0);
+    angle = map(potValue, 0, 4095, 180, 0); // can be changed for reading in opposite range
     
     myServo.write(angle);
     delay(30);
