@@ -125,7 +125,7 @@ This project is available in two versions:
 
 **Combined Version**: All code in a single `ESP32-Sonar.ino` file located in `combined/`. Easier to upload and manage as a standalone file.
 
-Both versions have identical functionality.
+Both versions have identical functionality. There is a simplified skeleton version but that is for a simple modeling guide.
 
 ### 1. Hardware Setup
 - Assemble ESP32-C3, servo, and ultrasonic sensor  
